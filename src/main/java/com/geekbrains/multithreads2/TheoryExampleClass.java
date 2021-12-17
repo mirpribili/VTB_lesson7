@@ -1,7 +1,9 @@
 package com.geekbrains.multithreads2;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 // попытка прокинуть переменную i  в тред = BAD
 public class TheoryExampleClass {
@@ -81,6 +83,10 @@ public class TheoryExampleClass {
  * isTerminated()    - проверка состояния
  * execute()         - заставляет нашу стандартную Runnable задачу отдать пулу на исполнение
  * submit()          - можно получить ответ из задачи
+ * * stringFuture
+ * * get()           - получаю данные из треда
+ * * get(longtimeout)- жду объект с ответом
+ * * isCansel isDone - проверка состояния
  */
 class ExecutorServiceApp{
     public static void main(String[] args){
@@ -97,6 +103,21 @@ class ExecutorServiceApp{
                 System.out.println(w + " - End");
             });
         }
+        service.shutdown();
+    }
+}
+//  пытаемся дать задачу по которой хотим получить ответ
+class ExecutorServiceApp2{
+    public static void main(String[] args) {
+        ExecutorService service = Executors.newFixedThreadPool(4);
+        // submit return объект типа Future(информация о выполнениии задачи)
+        Future<String> stringFuture = service.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "Java";
+            }
+        });
+        //stringFuture.
         service.shutdown();
     }
 }
