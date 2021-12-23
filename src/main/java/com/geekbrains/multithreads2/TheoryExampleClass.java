@@ -432,3 +432,38 @@ class SimpleSemaphoreApp{
         }
     }
 }
+// CyclicBarrier - идея как в скачках 
+    // сначала лошади подходят к барьеру и готовятся
+    // а потом когда они готовы барьер поднимается и лошади одновременно скачут    
+public class CyclicBarrierApp {
+    public static void main(String[] args) {
+        final int THREAD_COUNT = 5;
+        CyclicBarrier cyclicBarrierApp = new CyclicBarrier(THREAD_COUNT);
+        for(int i = 0; i < THREAD_COUNT; i++){
+            int w = i;
+                new Thread(new Runnable(){
+                @Override
+                public void run(){
+                    System.out.println("Подготавливается " + w);
+                    try{
+                        Thread.sleep(2000 + 500 * (int)(Match.random() * 10));
+                        System.out.println("Готов " + w);
+                        cyclicBarrier.await(); // как только счетчик сдесь станет 0 то потоки сначнут работу
+                        System.out.println("Поехал " + w);
+                        // есть опасность кругового сброса счетчика именно у БАРЬЕРА!
+                        // cyclicBarrier.await();
+                    }catch(InterruptedException | BrokenBarrierException e){
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }//for
+// атомарные переменные
+        // гарантируют что никакой тред не сможет вклиниться между
+        // увеличением(уменьш. и тд) счетчика и между запросом результата.
+        AtomicInteger ai = new AtomicInteger (10);
+        ai.addAndGet();
+        getAndAdd();
+        decrementAndGet();
+    }
+}
