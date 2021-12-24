@@ -1,7 +1,10 @@
 package com.geekbrains.multithreads2;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
+
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -435,10 +438,10 @@ class SimpleSemaphoreApp{
 // CyclicBarrier - идея как в скачках 
     // сначала лошади подходят к барьеру и готовятся
     // а потом когда они готовы барьер поднимается и лошади одновременно скачут    
-public class CyclicBarrierApp {
+class CyclicBarrierApp {
     public static void main(String[] args) {
         final int THREAD_COUNT = 5;
-        CyclicBarrier cyclicBarrierApp = new CyclicBarrier(THREAD_COUNT);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(THREAD_COUNT);
         for(int i = 0; i < THREAD_COUNT; i++){
             int w = i;
                 new Thread(new Runnable(){
@@ -446,7 +449,7 @@ public class CyclicBarrierApp {
                 public void run(){
                     System.out.println("Подготавливается " + w);
                     try{
-                        Thread.sleep(2000 + 500 * (int)(Match.random() * 10));
+                        Thread.sleep(2000 + 500 * (int)(Math.random() * 10));
                         System.out.println("Готов " + w);
                         cyclicBarrier.await(); // как только счетчик сдесь станет 0 то потоки сначнут работу
                         System.out.println("Поехал " + w);
@@ -458,12 +461,12 @@ public class CyclicBarrierApp {
                 }
             }).start();
         }//for
-// атомарные переменные
+// Атомарные переменные
         // гарантируют что никакой тред не сможет вклиниться между
         // увеличением(уменьш. и тд) счетчика и между запросом результата.
         AtomicInteger ai = new AtomicInteger (10);
-        ai.addAndGet();
-        getAndAdd();
-        decrementAndGet();
+        ai.addAndGet(5);
+        // getAndAdd();
+        // decrementAndGet();
     }
 }
